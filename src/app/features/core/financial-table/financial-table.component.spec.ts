@@ -81,4 +81,43 @@ describe('FinancialTableComponent', () => {
     expect(compiled.querySelector('.no-data').textContent).toContain('No hay datos disponibles');
   });
 
+  it('should update the highlighted data and total count when page size is changed', () => {
+    component.data = createMockProducts(20);
+    component.columns = [{ name: 'name', label: 'Name', type: ColumnType.TEXT }];
+    component.pageSizeOption = 5;
+    component.ngOnChanges();
+
+    expect(component.highlightedData.length).toBe(5);
+    expect(component.totalCount).toBe(5);
+
+    component.onRecordsChange({ target: { value: '20' } } as any);
+    expect(component.highlightedData.length).toBe(20);
+    expect(component.totalCount).toBe(20);
+  });
+
+  it('should correctly calculate total count for filtered data', () => {
+    component.data = createMockProducts(5);
+    component.columns = [{ name: 'name', label: 'Name', type: ColumnType.TEXT }];
+    component.ngOnChanges();
+
+    expect(component.totalCount).toBe(5);
+
+    const event = { target: { value: 'Product 1' } };
+    component.onSearch(event as any);
+
+    expect(component.totalCount).toBe(1);
+    expect(component.highlightedData.length).toBe(1);
+  });
+
+  it('should display "No hay datos disponibles" message when data is empty', () => {
+    component.columns = [{ name: 'name', label: 'Name', type: ColumnType.TEXT }];
+    component.highlightedData = [];
+
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement;
+    expect(compiled.querySelector('.no-data').textContent).toContain('No hay datos disponibles');
+  });
+
+
 });

@@ -1,5 +1,5 @@
 import {Component, Input, OnChanges} from '@angular/core';
-import {APP_LOCALE} from '../../../app.constants';
+import {APP_LOCALE, DEFAULT_PAGE_SIZE_OPTION, PAGE_SIZE_OPTIONS} from '../../../app.constants';
 
 export enum ColumnType {
     TEXT = 'TEXT',
@@ -30,37 +30,41 @@ export class FinancialTableComponent implements OnChanges {
     public filteredData: any[] = [];
     public searchTerm: string = '';
     public highlightedData: any[] = [];
+    public pageSizeOption: number = DEFAULT_PAGE_SIZE_OPTION;
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
+    public totalCount: number = 0;
 
     public ngOnChanges(): void {
         this.filteredData = [...this.data];
         this.highlightedData = this.getHighlightedData(this.filteredData);
+        this.updateDisplayedData();
     }
-
 
     public onSearch(event: Event): void {
         const inputElement = event.target as HTMLInputElement;
-        if (!inputElement) return;
         this.searchTerm = inputElement.value.trim().toLowerCase();
-
-        if (!this.searchTerm) {
-            this.filteredData = [...this.data];
-        } else {
-            this.filteredData = this.data.filter(row =>
+        this.filteredData = this.searchTerm
+            ? this.data.filter(row =>
                 this.columns.some(col => {
                     const cellValue = row[col.name];
-                    if (!cellValue) return false;
-                    let valueToCompare = cellValue.toString().toLowerCase();
-                    if (col.type === ColumnType.DATE) {
-                        valueToCompare = new Date(cellValue).toLocaleDateString(APP_LOCALE);
-                    }
-                    return valueToCompare.includes(this.searchTerm);
+                    return cellValue && cellValue.toString().toLowerCase().includes(this.searchTerm);
                 })
-            );
-        }
+            )
+            : [...this.data];
 
-        this.highlightedData = this.getHighlightedData(this.filteredData);
+        this.updateDisplayedData();
     }
 
+    public onRecordsChange(event: Event): void {
+        const selectElement = event.target as HTMLSelectElement;
+        this.pageSizeOption = parseInt(selectElement.value, 10);
+        this.updateDisplayedData();
+    }
+
+    private updateDisplayedData(): void {
+        this.totalCount = this.filteredData.length > this.pageSizeOption ? this.pageSizeOption : this.filteredData.length;
+        this.highlightedData = this.getHighlightedData(this.filteredData.slice(0, this.pageSizeOption));
+    }
 
     public getHighlightedData(data: any[]): any[] {
         return data.map(row => {

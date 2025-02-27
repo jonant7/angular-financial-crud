@@ -1,42 +1,49 @@
-<div class="search-container">
-  <input type="text" placeholder="Buscar..." (input)="onSearch($event)" />
-</div>
-  <div class="table-container">
-  <table>
-    <thead>
-    <tr>
-      @for (col of columns; track col) {
-        <th [style.text-align]="col.align || 'left'">{{ col.label }}</th>
-      }
-    </tr>
-    </thead>
-    <tbody>
-      @if (highlightedData.length) {
-        @for (row of highlightedData; track row) {
-          <tr>
-            @for (col of columns; track col) {
-              <td [style.text-align]="col.align || 'left'">
-                @switch (col.type) {
-                  @case (columnType.IMAGE) {
-                    <img [src]="row[col.name]" [alt]="col.label" width="50" height="50"/>
-                  }
-                  @case (columnType.DATE) {
-                    <span [innerHTML]="row[col.name]"></span>
-                  }
-                  @default {
-                    <span [innerHTML]="row[col.name]"></span>
-                  }
-                }
-              </td>
-            }
-          </tr>
-        }
-      } @else {
+<div class="table-container">
+    <div class="search-container">
+        <input type="text" placeholder="Buscar..." (input)="onSearch($event)"/>
+    </div>
+    <table>
+        <thead>
         <tr>
-          <td [attr.colspan]="columns.length" class="no-data">No hay datos disponibles</td>
+            @for (col of columns; track col) {
+                <th [style.text-align]="col.align || 'left'">{{ col.label }}</th>
+            }
         </tr>
-      }
-    </tbody>
-  </table>
-
+        </thead>
+        <tbody>
+            @if (highlightedData.length) {
+                @for (row of highlightedData; track row) {
+                    <tr>
+                        @for (col of columns; track col) {
+                            <td [style.text-align]="col.align || 'left'">
+                                @switch (col.type) {
+                                    @case (columnType.IMAGE) {
+                                        <img [src]="row[col.name]" [alt]="col.label" width="50" height="50"/>
+                                    }
+                                    @case (columnType.DATE) {
+                                        <span [innerHTML]="row[col.name]"></span>
+                                    }
+                                    @default {
+                                        <span [innerHTML]="row[col.name]"></span>
+                                    }
+                                }
+                            </td>
+                        }
+                    </tr>
+                }
+            } @else {
+                <tr>
+                    <td [attr.colspan]="columns.length" class="no-data">No hay datos disponibles</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="paginator">
+        <span> {{ totalCount + ' de ' + highlightedData.length + ' Resultados' }}</span>
+        <select (change)="onRecordsChange($event)">
+            @for (option of pageSizeOptions; track option) {
+                <option [value]="option">{{ option }}</option>
+            }
+        </select>
+    </div>
 </div>
