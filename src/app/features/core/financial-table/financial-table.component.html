@@ -1,4 +1,7 @@
-<div class="table-container">
+<div class="search-container">
+  <input type="text" placeholder="Buscar..." (input)="onSearch($event)" />
+</div>
+  <div class="table-container">
   <table>
     <thead>
     <tr>
@@ -8,8 +11,8 @@
     </tr>
     </thead>
     <tbody>
-      @if (data.length) {
-        @for (row of data; track row) {
+      @if (highlightedData.length) {
+        @for (row of highlightedData; track row) {
           <tr>
             @for (col of columns; track col) {
               <td [style.text-align]="col.align || 'left'">
@@ -18,10 +21,10 @@
                     <img [src]="row[col.name]" [alt]="col.label" width="50" height="50"/>
                   }
                   @case (columnType.DATE) {
-                    {{ row[col.name] | date:'dd/MM/yyyy' }}
+                    <span [innerHTML]="row[col.name]"></span>
                   }
                   @default {
-                    {{ row[col.name] }}
+                    <span [innerHTML]="row[col.name]"></span>
                   }
                 }
               </td>

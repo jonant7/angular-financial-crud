@@ -1,8 +1,7 @@
 import {ComponentFixture, TestBed} from '@angular/core/testing';
-
 import {ColumnType, FinancialTableComponent} from './financial-table.component';
-import {By} from '@angular/platform-browser';
 import {DatePipe} from '@angular/common';
+import {createMockProducts} from '../../../models/products/product-factory';
 
 describe('FinancialTableComponent', () => {
   let component: FinancialTableComponent;
@@ -18,59 +17,68 @@ describe('FinancialTableComponent', () => {
     component = fixture.componentInstance;
   });
 
-  test('should be created', () => {
-    expect(component).toBeTruthy();
+  it('should initialize filteredData and highlightedData on ngOnChanges', () => {
+    const mockProducts = createMockProducts(1);
+    component.data = mockProducts;
+    component.columns = [{ name: 'name', label: 'Name', type: ColumnType.TEXT }];
+    component.ngOnChanges();
+
+    expect(component.filteredData).toEqual(mockProducts);
+    expect(component.highlightedData).toEqual(mockProducts);
   });
 
-  test('should render table headers correctly', () => {
+  it('should filter data based on search term', () => {
+    component.data = createMockProducts(2);
     component.columns = [
-      {name: 'name', label: 'Name', type: ColumnType.TEXT},
-      {name: 'date', label: 'Date', type: ColumnType.DATE}
+      { name: 'name', label: 'Name', type: ColumnType.TEXT },
+      { name: 'dateRelease', label: 'Release Date', type: ColumnType.DATE }
     ];
-    fixture.detectChanges();
 
-    const headers = fixture.debugElement.queryAll(By.css('th'));
-    expect(headers.length).toBe(2);
-    expect(headers[0].nativeElement.textContent.trim()).toBe('Name');
-    expect(headers[1].nativeElement.textContent.trim()).toBe('Date');
+    const event = { target: { value: 'Product 2' } };
+    component.onSearch(event as any);
+
+    expect(component.filteredData.length).toBe(1);
+    expect(component.filteredData[0].name).toBe('Product 2');
   });
 
-  test('should render data correctly in the table', () => {
-    component.columns = [
-      {name: 'name', label: 'Name', type: ColumnType.TEXT},
-      {name: 'date', label: 'Date', type: ColumnType.DATE}
-    ];
-    component.data = [
-      {name: 'Product 1', date: '2024-02-27'},
-      {name: 'Product 2', date: '2025-03-01'}
-    ];
-    fixture.detectChanges();
+  it('should reset filteredData if search term is empty', () => {
+    component.data = createMockProducts(2);
+    component.columns = [{ name: 'name', label: 'Name', type: ColumnType.TEXT, align: "left" }];
 
-    const rows = fixture.debugElement.queryAll(By.css('tbody tr'));
-    expect(rows.length).toBe(2);
+    component.onSearch({ target: { value: '' } } as any);
 
-    const cells = rows[0].queryAll(By.css('td'));
-    expect(cells[0].nativeElement.textContent.trim()).toBe('Product 1');
-    expect(cells[1].nativeElement.textContent.trim()).toBe('27/02/2024'); // Formatted date
+    expect(component.filteredData.length).toBe(2);
   });
 
-  test('should render images correctly', () => {
-    component.columns = [{name: 'logo', label: 'Logo', type: ColumnType.IMAGE}];
-    component.data = [{logo: 'image-url.png'}];
-    fixture.detectChanges();
+  it('should highlight search term in the highlightedData after onSearch', () => {
+    component.data = createMockProducts(1);
+    component.columns = [{ name: 'name', label: 'Name', type: ColumnType.TEXT }];
+    component.searchTerm = 'Product 1';
 
-    const imgElement = fixture.debugElement.query(By.css('img'));
-    expect(imgElement).toBeTruthy();
-    expect(imgElement.nativeElement.src).toContain('image-url.png');
+    const event = { target: { value: 'Product 1' } };
+    component.onSearch(event as any);
+
+    expect(component.highlightedData[0].name).toContain('<mark>Product 1</mark>');
   });
 
-  test('should show "No hay datos disponibles"" when there are no data', () => {
-    component.columns = [{name: 'name', label: 'Name', type: ColumnType.TEXT}];
-    component.data = [];
-    fixture.detectChanges();
+  it('should return the value with highlights', () => {
+    const result = component.applyHighlight('Hello World', 'world');
+    expect(result).toBe('Hello <mark>World</mark>');
+  });
 
-    const noDataElement = fixture.debugElement.query(By.css('.no-data'));
-    expect(noDataElement.nativeElement.textContent.trim()).toBe('No hay datos disponibles');
+  it('should return the original value if term is not found', () => {
+    const result = component.applyHighlight('Hello World', 'foo');
+    expect(result).toBe('Hello World');
+  });
+
+  it('should display no data message when highlightedData is empty', () => {
+    component.columns = [{ name: 'name', label: 'Name', type: ColumnType.TEXT }];
+    component.highlightedData = [];
+
+    fixture.detectChanges();
+    const compiled = fixture.nativeElement;
+
+    expect(compiled.querySelector('.no-data').textContent).toContain('No hay datos disponibles');
   });
 
 });

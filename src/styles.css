@@ -11,16 +11,37 @@
   --success-color: #4caf50;
 }
 
-* { margin: 0; padding: 0; }
-*, *::before, *::after { box-sizing: border-box; }
+* {
+  margin: 0;
+  padding: 0;
+}
 
-body { min-height: 100dvh; }
-input, button, textarea, select { font: inherit; }
+*, *::before, *::after {
+  box-sizing: border-box;
+}
 
-p { text-wrap: pretty; }
-h1, h2, h3, h4, h5, h6 { text-wrap: balance; font-weight: 500; color: var(--secondary-color); }
+body {
+  min-height: 100dvh;
+}
 
-img, video, svg { height: auto; max-width: 100%; }
+input, button, textarea, select {
+  font: inherit;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  text-wrap: balance;
+  font-weight: 500;
+  color: var(--secondary-color);
+}
+
+img, video, svg {
+  height: auto;
+  max-width: 100%;
+}
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
@@ -38,6 +59,7 @@ body {
   color: var(--primary-color);
 }
 
+/* Containers */
 header {
   background-color: var(--white);
   display: flex;
@@ -54,6 +76,15 @@ header {
   width: 100%;
 }
 
+/* Form */
+input {
+  padding: 10px;
+  font-size: 16px;
+  border: 2px solid var(--terthiary-color);
+  border-radius: 8px;
+}
+
+/* Media queries */
 @media (min-width: 320px) {
   .container {
     max-width: 320px;

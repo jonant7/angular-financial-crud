@@ -38,6 +38,10 @@ img {
   font-weight: bold;
 }
 
+.search-container {
+  padding-bottom: 1rem;
+}
+
 @media (min-width: 768px) {
   table {
     width: 100%;
