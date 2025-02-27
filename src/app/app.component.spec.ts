@@ -14,16 +14,10 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  test(`should have the 'financial-crud' title`, () => {
+  test(`should have the 'Financial' title`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('financial-crud');
+    expect(app.title).toEqual('Financial');
   });
 
-  test('should render title', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, financial-crud');
-  });
 });

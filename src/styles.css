@@ -1,1 +1,88 @@
 /* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+:root {
+  --white: #fff;
+  --bg-color: #f4f6f9;
+  --primary-color: #5b5b5f;
+  --secondary-color: #0f265c;
+  --terthiary-color: #f0f0f0;
+  --error-color: #f44336;
+  --success-color: #4caf50;
+}
+
+* { margin: 0; padding: 0; }
+*, *::before, *::after { box-sizing: border-box; }
+
+body { min-height: 100dvh; }
+input, button, textarea, select { font: inherit; }
+
+p { text-wrap: pretty; }
+h1, h2, h3, h4, h5, h6 { text-wrap: balance; font-weight: 500; color: var(--secondary-color); }
+
+img, video, svg { height: auto; max-width: 100%; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+    transition: none;
+  }
+}
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  background-color: var(--bg-color);
+  color: var(--primary-color);
+}
+
+header {
+  background-color: var(--white);
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 1rem;
+  color: var(--secondary-color);
+}
+
+.container {
+  max-width: 1440px;
+  width: 100%;
+}
+
+@media (min-width: 320px) {
+  .container {
+    max-width: 320px;
+    margin: 3rem auto;
+  }
+}
+
+@media (min-width: 425px) {
+  .container {
+    max-width: calc(425px - 2.5rem);
+    margin: 4rem auto;
+  }
+}
+
+@media (min-width: 768px) {
+  .container {
+    max-width: calc(768px - 4rem);
+    margin: 5rem auto;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    max-width: calc(1024px - 6rem);
+  }
+}
+
+@media (min-width: 1440px) {
+  .container {
+    max-width: calc(1440px - 8rem);
+  }
+}

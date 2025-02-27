@@ -1,0 +1,28 @@
+.list-container {
+  background-color: var(--white);
+  padding: 1.5rem;
+}
+
+@media (min-width: 320px) {
+  .list-container {
+    padding: 0.5rem;
+  }
+}
+
+@media (min-width: 425px) {
+  .list-container {
+    padding: 1rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .list-container {
+    padding: 1.25rem;
+  }
+}
+
+@media (min-width: 1024px) {
+}
+
+@media (min-width: 1440px) {
+}

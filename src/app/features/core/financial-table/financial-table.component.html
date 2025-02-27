@@ -1,0 +1,39 @@
+<div class="table-container">
+  <table>
+    <thead>
+    <tr>
+      @for (col of columns; track col) {
+        <th [style.text-align]="col.align || 'left'">{{ col.label }}</th>
+      }
+    </tr>
+    </thead>
+    <tbody>
+      @if (data.length) {
+        @for (row of data; track row) {
+          <tr>
+            @for (col of columns; track col) {
+              <td [style.text-align]="col.align || 'left'">
+                @switch (col.type) {
+                  @case (columnType.IMAGE) {
+                    <img [src]="row[col.name]" [alt]="col.label" width="50" height="50"/>
+                  }
+                  @case (columnType.DATE) {
+                    {{ row[col.name] | date:'dd/MM/yyyy' }}
+                  }
+                  @default {
+                    {{ row[col.name] }}
+                  }
+                }
+              </td>
+            }
+          </tr>
+        }
+      } @else {
+        <tr>
+          <td [attr.colspan]="columns.length" class="no-data">No hay datos disponibles</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+
+</div>
