@@ -1,9 +1,11 @@
-import {Component, inject, Input, OnChanges} from '@angular/core';
+import {Component, ElementRef, HostListener, inject, Input, OnChanges, ViewChild} from '@angular/core';
 import {APP_LOCALE, DEFAULT_PAGE_SIZE_OPTION, PAGE_SIZE_OPTIONS} from '../../../app.constants';
 import {RouterLink} from "@angular/router";
 import {NgIf, NgTemplateOutlet} from '@angular/common';
 import {Product} from '../../../models/products/product';
 import {ProductService} from '../../../providers/products/product.service';
+import {ToastService} from '../../../providers/core/toast/toast.service';
+import {catchError, of} from 'rxjs';
 
 export enum ColumnType {
   TEXT = 'TEXT',
@@ -31,11 +33,14 @@ export interface Column {
 })
 
 export class FinancialTableComponent implements OnChanges {
+  @ViewChild('dropdownMenu') dropdownMenu!: ElementRef;
+
   @Input() columns: Column[] = [];
   @Input() data: any[] = [];
   @Input() buttonLink: string = '';
 
   private readonly productService: ProductService = inject(ProductService);
+  private readonly toastService: ToastService = inject(ToastService);
 
   public readonly columnType = ColumnType;
 
@@ -109,10 +114,34 @@ export class FinancialTableComponent implements OnChanges {
     }
   }
 
+  @HostListener('document:click', ['$event'])
+  public closeMenu(event: Event): void {
+    if (this.dropdownMenu && !this.dropdownMenu.nativeElement.contains(event.target)) {
+      this.menuOpenForId = null;
+    }
+  }
+
   public onEdit(product: Product): void {
     this.productService.onEdit(product);
   }
 
-  public onDelete(productId: string): void {
+  public onDelete(product: Product): void {
+    this.productService.openConfirmationDialog(product)
+      .subscribe(result => {
+        if (result) {
+          this.productService.delete(product.id).pipe(
+            catchError(error => {
+              this.toastService.showError(`No se ha podido eliminar el producto: ${error.message}`);
+              return of(null);
+            })
+          ).subscribe(() => {
+            this.toastService.showSuccess('Producto eliminado');
+            this.productService.list().subscribe(updatedProducts => {
+              this.data = updatedProducts;
+              this.ngOnChanges();
+            });
+          });
+        }
+      })
   }
 }

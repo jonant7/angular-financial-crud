@@ -6,6 +6,7 @@ import {map} from 'rxjs/operators';
 import {ProductPost} from '../../models/products/product-post';
 import {Router} from '@angular/router';
 import {ProductPut} from '../../models/products/product-put';
+import {ConfirmDialogService} from '../core/dialog/dialog.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +14,7 @@ import {ProductPut} from '../../models/products/product-put';
 export class ProductService {
 
   private readonly httpClientService: HttpClientService = inject(HttpClientService);
+  private readonly dialogService: ConfirmDialogService = inject(ConfirmDialogService);
   private readonly router: Router = inject(Router);
 
   public list(): Observable<Product[]> {
@@ -58,7 +60,21 @@ export class ProductService {
       );
   }
 
+  public delete(id: string): Observable<string> {
+    return this.httpClientService.delete(`/api/products/${id}`)
+      .pipe(
+        map(response => {
+          return response.message;
+        })
+      );
+  }
+
   public onEdit(product: Product): void {
     this.router.navigate([`/edit/${product.id}`]);
   }
+
+  public openConfirmationDialog(product: Product): Observable<boolean> {
+    return this.dialogService.openDialog(`¿Estás seguro de eliminar el producto ${product.name}?`);
+  }
+
 }

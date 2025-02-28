@@ -62,7 +62,7 @@ img {
   border: 1px solid var(--terthiary-color);
   border-radius: 4px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: .35rem;
+  padding: 0.35rem;
   min-width: 150px;
   z-index: 1000;
   text-align: center;
@@ -72,7 +72,8 @@ img {
   font-size: 16px;
 }
 
-.dropdown-menu a, .dropdown-menu button {
+.dropdown-menu a,
+.dropdown-menu button {
   background-color: transparent;
   width: 100%;
   padding: 0.5rem 1.5rem;
@@ -88,10 +89,7 @@ img {
   color: var(--error-color);
 }
 
-.dropdown-menu a:hover {
-  background-color: #f1f1f1;
-}
-
+.dropdown-menu a:hover,
 .dropdown-menu button:hover {
   background-color: #f1f1f1;
 }
