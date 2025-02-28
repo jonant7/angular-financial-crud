@@ -1,10 +1,11 @@
 import {TestBed} from '@angular/core/testing';
 import {ProductService} from './product.service';
 import {Product} from '../../models/products/product';
-import {createMockProducts, createProduct, createProductPost} from '../../models/products/product-factory';
+import {createMockProducts, createProduct} from '../../models/products/product-factory';
 import {ProductPost} from '../../models/products/product-post';
 import {HttpTestingController, provideHttpClientTesting} from '@angular/common/http/testing';
 import {provideHttpClient} from '@angular/common/http';
+import {ProductPut} from '../../models/products/product-put';
 
 describe('ProductService', () => {
   let service: ProductService;
@@ -61,7 +62,7 @@ describe('ProductService', () => {
   });
 
   it('should return a product when POST request is successful', async () => {
-    const mockProductPost: ProductPost = createProductPost();
+    const mockProductPost: ProductPost = createProduct();
     const mockProduct: Product = createProduct();
     const testUrl = '/api/products';
 
@@ -72,6 +73,33 @@ describe('ProductService', () => {
 
     const req = httpTesting.expectOne(testUrl);
     expect(req.request.method).toBe('POST');
+    req.flush(mockProduct);
+  });
+
+  it('should return a product when PUT request is successful', () => {
+    const mockProductPut: ProductPut = createProduct();
+    const mockProduct: Product = createProduct();
+    const testUrl = '/api/products/1';
+
+    service.update('1', mockProductPut).subscribe((result) => {
+      expect(result).toEqual(mockProduct);
+    });
+
+    const req = httpTesting.expectOne(testUrl);
+    expect(req.request.method).toBe('PUT');
+    req.flush({data: mockProduct});
+  });
+
+  it('should return a product when GET request by ID is successful', () => {
+    const mockProduct: Product = createProduct();
+    const testUrl = '/api/products/1';
+
+    service.get('1').subscribe((result) => {
+      expect(result).toEqual(mockProduct);
+    });
+
+    const req = httpTesting.expectOne(testUrl);
+    expect(req.request.method).toBe('GET');
     req.flush(mockProduct);
   });
 

@@ -4,15 +4,17 @@ import {DatePipe} from '@angular/common';
 import {createMockProducts} from '../../../models/products/product-factory';
 import {By} from "@angular/platform-browser";
 import {provideRouter} from "@angular/router";
+import {provideHttpClient} from '@angular/common/http';
+import {provideHttpClientTesting} from '@angular/common/http/testing';
 
 describe('FinancialTableComponent', () => {
     let component: FinancialTableComponent;
     let fixture: ComponentFixture<FinancialTableComponent>;
 
-    beforeEach(() => {
-        TestBed.configureTestingModule({
+    beforeEach(async () => {
+       await TestBed.configureTestingModule({
             imports: [FinancialTableComponent],
-            providers: [DatePipe, provideRouter([])]
+            providers: [DatePipe, provideRouter([]), provideHttpClient(), provideHttpClientTesting()]
         }).compileComponents();
 
         fixture = TestBed.createComponent(FinancialTableComponent);

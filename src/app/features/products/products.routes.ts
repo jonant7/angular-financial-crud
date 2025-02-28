@@ -12,5 +12,11 @@ export const routes: Routes = [
     loadComponent: () => import(  './product-edition/product-edition.component')
       .then(c => c.ProductEditionComponent),
     pathMatch: "full"
+  },
+  {
+    path: 'edit/:id',
+    loadComponent: () => import(  './product-edition/product-edition.component')
+      .then(c => c.ProductEditionComponent),
+    pathMatch: "full"
   }
 ];

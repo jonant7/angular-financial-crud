@@ -4,6 +4,8 @@ import {HttpClientService} from '../core/http/http-client.service';
 import {Product} from '../../models/products/product';
 import {map} from 'rxjs/operators';
 import {ProductPost} from '../../models/products/product-post';
+import {Router} from '@angular/router';
+import {ProductPut} from '../../models/products/product-put';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +13,7 @@ import {ProductPost} from '../../models/products/product-post';
 export class ProductService {
 
   private readonly httpClientService: HttpClientService = inject(HttpClientService);
+  private readonly router: Router = inject(Router);
 
   public list(): Observable<Product[]> {
     return this.httpClientService.get(`/api/products`)
@@ -37,4 +40,25 @@ export class ProductService {
       );
   }
 
+  public update(id: string, product: ProductPut): Observable<Product> {
+    return this.httpClientService.put(`/api/products/${id}`, product)
+      .pipe(
+        map(response => {
+          return response['data'];
+        })
+      );
+  }
+
+  public get(id: string): Observable<Product> {
+    return this.httpClientService.get(`/api/products/${id}`)
+      .pipe(
+        map(response => {
+          return response as unknown as Product;
+        })
+      );
+  }
+
+  public onEdit(product: Product): void {
+    this.router.navigate([`/edit/${product.id}`]);
+  }
 }

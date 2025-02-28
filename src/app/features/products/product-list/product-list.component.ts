@@ -22,7 +22,8 @@ export class ProductListComponent implements OnInit, OnDestroy {
     {name: 'name', label: 'Nombre', type: ColumnType.TEXT},
     {name: 'description', label: 'Descripción', type: ColumnType.TEXT},
     {name: 'date_release', label: 'Fecha de Lanzamiento', type: ColumnType.DATE},
-    {name: 'date_revision', label: 'Fecha de Revisión', type: ColumnType.DATE}
+    {name: 'date_revision', label: 'Fecha de Revisión', type: ColumnType.DATE},
+    {name: 'action', label: '', type: ColumnType.ACTION}
   ];
   private _unsubscribeAll: Subject<void> = new Subject<void>();
   public dataSource: Product[] = [];

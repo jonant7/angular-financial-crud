@@ -1,9 +1,7 @@
-import {AbstractEntity} from '../abstract-entity';
-
-export interface ProductPut extends AbstractEntity {
+export interface ProductPut {
   name: string;
   description: string;
   logo: string;
-  dateRelease: Date;
-  dateRevision: Date;
+  date_release: Date;
+  date_revision: Date;
 }
