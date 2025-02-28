@@ -1,59 +1,42 @@
-# FinancialCrud
+# Technical Test - Frontend Angular
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.1.5.
 
-## Development server
+## Description
+This project is an Angular application that allows financial product management through a web interface. The application implements listing, searching, pagination, creation, editing, and deletion of financial products, fulfilling the requirements of the technical test.
 
-To start a local development server, run:
+## Requirements
+Before running the project, ensure you have installed:
+
+Node.js (v18 or higher)
+
+npm (v10 or higher)
+
+
+## Running the Project
+To run the application in development mode:
 
 ```bash
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## Implemented Features
+- F1. Financial Product Listing: API consumption to display products.
 
-## Code scaffolding
+- F2. Product Search: Filter based on entered text.
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+- F3. Pagination: Selection of records per page (5, 10, 20).
 
-```bash
-ng generate component component-name
-```
+- F4. Add Product: Form with validations.
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+- F5. Edit Product: Editing form with restrictions.
 
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+- F6. Delete Product: Deletion via confirmation modal.
 
 ## Running unit tests
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+The project includes unit tests with Jest. To run the tests:
 
 ```bash
-ng test
+npm run test
 ```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
