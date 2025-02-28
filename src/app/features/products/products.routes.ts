@@ -7,4 +7,10 @@ export const routes: Routes = [
       .then(c => c.ProductListComponent),
     pathMatch: "full"
   },
+  {
+    path: 'create',
+    loadComponent: () => import(  './product-edition/product-edition.component')
+      .then(c => c.ProductEditionComponent),
+    pathMatch: "full"
+  }
 ];

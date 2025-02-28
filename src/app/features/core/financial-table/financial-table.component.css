@@ -40,6 +40,12 @@ img {
 
 .search-container {
   padding-bottom: 1rem;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
 }
 
 .paginator{
@@ -48,6 +54,18 @@ img {
   justify-content: space-between;
   align-items: center;
   padding: 1rem 0;
+}
+
+@media (max-width: 425px) {
+  .search-container {
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    & input {
+      width: 100%;
+    }
+  }
 }
 
 @media (min-width: 768px) {

@@ -1,45 +1,78 @@
 import {TestBed} from '@angular/core/testing';
 import {ProductService} from './product.service';
-import {HttpClientService} from '../core/http/http-client.service';
 import {Product} from '../../models/products/product';
-import {of} from 'rxjs';
+import {createMockProducts, createProduct, createProductPost} from '../../models/products/product-factory';
+import {ProductPost} from '../../models/products/product-post';
+import {HttpTestingController, provideHttpClientTesting} from '@angular/common/http/testing';
+import {provideHttpClient} from '@angular/common/http';
 
 describe('ProductService', () => {
   let service: ProductService;
-  let httpClientServiceMock: jest.Mocked<HttpClientService>;
+  let httpTesting: HttpTestingController;
 
   beforeEach(() => {
-    const mockHttpClientService = {
-      get: jest.fn()
-    } as unknown as jest.Mocked<HttpClientService>;
-
     TestBed.configureTestingModule({
       providers: [
         ProductService,
-        { provide: HttpClientService, useValue: mockHttpClientService } // Usa el mock
+        provideHttpClient(),
+        provideHttpClientTesting(),
       ]
     });
 
     service = TestBed.inject(ProductService);
-    httpClientServiceMock = TestBed.inject(HttpClientService) as jest.Mocked<HttpClientService>;
+    httpTesting = TestBed.inject(HttpTestingController);
   });
 
-  test('should be created', () => {
+  afterEach(() => {
+    httpTesting.verify();
+  });
+
+  it('should be created', () => {
     expect(service).toBeTruthy();
   });
 
-  test('should return a list of products when GET request is successful', (done) => {
-    const mockProducts: Product[] = [
-      { id: 'id-1', name: 'Product 1', description: 'Description 1', logo: 'logo-1.jpg', dateRelease: new Date(), dateRevision: new Date() },
-      { id: 'id-2', name: 'Product 2', description: 'Description 2', logo: 'logo-2.jpg', dateRelease: new Date(), dateRevision: new Date() },
-    ];
-
-    httpClientServiceMock.get.mockReturnValue(of({ data: mockProducts, message: 'Success' }));
+  it('should return a list of products when GET request is successful', async () => {
+    const mockProducts: Product[] = createMockProducts(3);
+    const mockErrorResponse = {data: mockProducts, message: 'Success'}
+    const testUrl = '/api/products';
 
     service.list().subscribe((products) => {
       expect(products).toEqual(mockProducts);
-      expect(httpClientServiceMock.get).toHaveBeenCalledWith('/api/products');
-      done();
+      expect(service.list()).toHaveBeenCalledWith(testUrl);
     });
+
+    const req = httpTesting.expectOne(testUrl);
+    expect(req.request.method).toBe('GET');
+    req.flush(mockErrorResponse);
   });
+
+  it('should return a boolean when GET request is successful', async () => {
+    const mockErrorResponse = true
+    const testUrl = '/api/products/verification/';
+
+    service.validate('id').subscribe((result) => {
+      expect(result).toEqual(true);
+      expect(service.list()).toHaveBeenCalledWith(testUrl + 'id');
+    });
+
+    const req = httpTesting.expectOne(testUrl + 'id');
+    expect(req.request.method).toBe('GET');
+    req.flush(mockErrorResponse);
+  });
+
+  it('should return a product when POST request is successful', async () => {
+    const mockProductPost: ProductPost = createProductPost();
+    const mockProduct: Product = createProduct();
+    const testUrl = '/api/products';
+
+    service.create(mockProductPost).subscribe((result) => {
+      expect(result).toEqual(true);
+      expect(service.list()).toHaveBeenCalledWith(testUrl);
+    });
+
+    const req = httpTesting.expectOne(testUrl);
+    expect(req.request.method).toBe('POST');
+    req.flush(mockProduct);
+  });
+
 });

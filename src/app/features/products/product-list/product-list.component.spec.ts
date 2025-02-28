@@ -8,6 +8,7 @@ import {Product} from '../../../models/products/product';
 import {ToastService} from '../../../providers/core/toast/toast.service';
 import {provideHttpClient} from '@angular/common/http';
 import {createMockProducts} from '../../../models/products/product-factory';
+import {RouterModule} from '@angular/router';
 
 describe('ProductListComponent', () => {
   let component: ProductListComponent;
@@ -17,6 +18,9 @@ describe('ProductListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      imports: [ProductListComponent, RouterModule.forRoot(
+        [{path: '', component: ProductListComponent}]
+      )],
       providers: [ProductService, ToastService, provideHttpClient(), provideHttpClientTesting(),]
     }).compileComponents();
 

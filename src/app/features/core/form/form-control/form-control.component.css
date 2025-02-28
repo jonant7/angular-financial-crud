@@ -1,0 +1,26 @@
+.is-invalid {
+  border: 1px solid var(--error-color);
+}
+
+.error-message {
+  color: var(--error-color);;
+  font-size: 0.9em;
+}
+
+textarea:focus.is-invalid,
+input:focus.is-invalid,
+input[type]:focus.is-invalid {
+  border-color: var(--error-color);
+}
+
+.form-control {
+  width: 100%;
+}
+
+.form-control input, .form-control textarea {
+  display: block;
+  width: 100%;
+  margin: 0.5rem 0;
+  padding: 0.5rem;
+  font-size: 1rem;
+}

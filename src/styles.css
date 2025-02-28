@@ -7,6 +7,7 @@
   --primary-color: #5b5b5f;
   --secondary-color: #0f265c;
   --terthiary-color: #f0f0f0;
+  --yellow-color: #FFDD00;
   --error-color: #f44336;
   --success-color: #4caf50;
 }
@@ -26,6 +27,10 @@ body {
 
 input, button, textarea, select {
   font: inherit;
+}
+
+a {
+  text-decoration: none;
 }
 
 p {
@@ -84,6 +89,11 @@ input {
   border-radius: 8px;
 }
 
+textarea:focus, input:focus, input[type]:focus {
+  border-color: var(--secondary-color);
+  outline: 0 none;
+}
+
 select {
   background-color: var(--white);
   border: 2px solid var(--terthiary-color);
@@ -94,6 +104,28 @@ select {
   font-size: inherit;
   cursor: pointer;
   line-height: inherit;
+}
+
+/* Buttons */
+.btn, button{
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn, button:active {
+  transform: scale(0.98);
+}
+
+.btn-yellow {
+  background-color: var(--yellow-color);
+  color: var(--secondary-color);
+  &:hover {
+    background-color: var(--yellow-color);
+    opacity: 0.8;
+  }
 }
 
 /* Media queries */

@@ -1,5 +1,6 @@
 import {Component, Input, OnChanges} from '@angular/core';
 import {APP_LOCALE, DEFAULT_PAGE_SIZE_OPTION, PAGE_SIZE_OPTIONS} from '../../../app.constants';
+import {RouterLink} from "@angular/router";
 
 export enum ColumnType {
     TEXT = 'TEXT',
@@ -16,7 +17,9 @@ export interface Column {
 
 @Component({
     selector: 'app-financial-table',
-    imports: [],
+    imports: [
+        RouterLink
+    ],
     templateUrl: './financial-table.component.html',
     styleUrl: './financial-table.component.css'
 })
@@ -24,6 +27,7 @@ export interface Column {
 export class FinancialTableComponent implements OnChanges {
     @Input() columns: Column[] = [];
     @Input() data: any[] = [];
+    @Input() buttonLink: string = '';
 
     public readonly columnType = ColumnType;
 

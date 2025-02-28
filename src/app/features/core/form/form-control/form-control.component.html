@@ -1,0 +1,7 @@
+<div class="form-control">
+  <label>{{ label }}</label>
+  <input [type]="type" [formControl]="control" [placeholder]="placeholder" [ngClass]="{'is-invalid': isInvalid}" [readonly]="readonly">
+  @if (isInvalid) {
+    <span class="error-message">{{ errorMessage?.message }}</span>
+  }
+</div>

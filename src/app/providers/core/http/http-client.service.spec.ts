@@ -2,6 +2,7 @@ import {TestBed} from '@angular/core/testing';
 import {HttpTestingController, provideHttpClientTesting} from '@angular/common/http/testing';
 import {ApiResponse, HttpClientService} from './http-client.service';
 import {provideHttpClient} from '@angular/common/http';
+import {HttpResponseError} from "../../../models/core/http-response-error";
 
 describe('HttpClientService', () => {
   let service: HttpClientService;
@@ -114,4 +115,39 @@ describe('HttpClientService', () => {
     expect(req.request.method).toBe('DELETE');
     req.flush(mockResponse);
   });
+
+  it('should throw an error using error.message if available', (done) => {
+    const testUrl = '/api/test';
+    const mockErrorResponse: HttpResponseError = { message: 'Test error message', cause: 'Test cause' };
+
+    service.get(testUrl).subscribe({
+      next: () => done.fail('Expected error to be thrown'),
+      error: (error: Error) => {
+        expect(error.message).toBe('Test error message');
+        done();
+      }
+    });
+
+    const req = httpTesting.expectOne(testUrl);
+    expect(req.request.method).toBe('GET');
+    req.flush(mockErrorResponse, { status: 201, statusText: 'Server Error' });
+  });
+
+  it('should throw an error using response.statusText if error.message is null', (done) => {
+    const testUrl = '/api/test';
+    const mockErrorResponse: HttpResponseError = { message: null as any, cause: 'Test cause' };
+
+    service.get(testUrl).subscribe({
+      next: () => done.fail('Expected error to be thrown'),
+      error: (error: Error) => {
+        expect(error.message).toBe('Server Error');
+        done();
+      }
+    });
+
+    const req = httpTesting.expectOne(testUrl);
+    expect(req.request.method).toBe('GET');
+    req.flush(mockErrorResponse, { status: 201, statusText: 'Server Error' });
+  });
+
 });
